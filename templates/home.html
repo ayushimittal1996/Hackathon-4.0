@@ -1,0 +1,108 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<title>Welcome</title>
+<link rel="stylesheet" href={{ url_for('static', filename='css/home.css') }} />
+<link rel="stylesheet" href={{ url_for('static', filename='css/topStyle.css') }} />
+<style>
+	ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333333;
+}
+
+li {
+    float :left;
+}
+
+li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 16px;
+    text-decoration: none;
+}
+
+li ahover {
+    background-color: #111111;
+}
+</style>
+</head>
+<body bgcolor="#ffe4c4" vlink="#f0f8ff">
+<div id="title">
+	<a href="/">
+		<img id="logo" src= {{ url_for('static', filename='images/logo.png') }} />
+	</a>
+	<form>
+		<input id="searchBox" type="text" name="searchQuery">
+		<input id="searchButton" type="submit" value="Search" style="width:8em;height=30em">
+	</form>
+
+	{% if not loggedIn %}
+	<div id="signInButton">
+		<a class="link" href="/loginForm">Sign In</a>
+	</div>
+	{% else %}
+	<div class="dropdown">
+		<button class="dropbtn">Hello, <br>{{firstName}}</button>
+		<div class="dropdown-content">
+			<a href="/account/orders">Your orders</a>
+			<a href="/account/profile">Your profile</a>
+			<hr>
+			<a href="/logout">Sign Out</a>
+		</div>
+	</div>
+	{% endif %}
+	<div id="kart">
+		<a class="link" href="/cart">
+			<img src={{url_for('static', filename='images/shoppingCart.png')}} id="cartIcon" />
+			CART {{noOfItems}}
+		</a>
+	</div>
+</div>
+<div class="display">
+	<div class="displayCategory">
+		<h2 align="center"><font face="Comic sans MS" size="6">Shop by Category</font></h2>
+		<ul>
+			{% for row in categoryData %}
+			<li ><a href="/displayCategory?categoryId={{row[0]}}">{{row[1]}}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div>
+		<h2 align="center"><font face="Comic sans MS" size="6" >Items</font></h2>
+		{% for data in itemData %}
+		<table width="100%">
+			<tr id="productName">
+				{% for row in data %}
+				<td style="font-size: 24px">
+					{{row[1]}}
+				</td>
+				{% endfor %}
+			</tr>
+			<tr id="productImage">
+				{% for row in data %}
+				<td align="center">
+					<a href="/productDescription?productId={{row[0]}}">
+						<img src={{ url_for('static', filename='uploads/' + row[4]) }} id="itemImage" />
+					</a>
+				</td>
+				{% endfor %}
+			</tr>
+			<tr id="productPrice">
+				{% for row in data %}
+				<td style="font-size:20px">
+					${{row[2]}}
+				</td>
+				{% endfor %}
+			</tr>
+		</table>
+		{% endfor %}
+		<h2><marquee>More Items coming soon...</marquee></h2>
+	</div>
+</div>
+</body>
+</html>
+
